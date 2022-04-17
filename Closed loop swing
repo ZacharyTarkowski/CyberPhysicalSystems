@@ -1,0 +1,40 @@
+//characterize fast movements / steady state behavior for servo
+
+#include <Servo.h>
+
+Servo myservo;  // create servo object to control a servo
+// twelve servo objects can be created on most boards
+
+int pos = 0;    // variable to store the servo position
+
+void setup() {
+  Serial.begin(115200);
+  myservo.attach(9);  // attaches the servo on pin 9 to the servo object
+  TCCR2A |= (1<<WGM21); //CTC mode
+  TCCR2B |= (1<<CS22) | (1<<CS21) | (1<<CS20); //prescale 1024
+  OCR2A = 255; 
+  TIMSK2 |= (1<<OCIE2A); //timer2
+  sei(); 
+}
+
+ISR (TIMER2_COMPA_vect)
+{
+
+  int val = analogRead(0);    
+  
+  Serial.println(val);
+
+  
+  
+}
+
+void loop() {
+   int val;
+
+    myservo.write(180);  
+    delay(2000);                       // waits 15 ms for the servo to reach the position
+  
+    myservo.write(0);  
+    delay(2000);                       // waits 15 ms for the servo to reach the position
+  
+}
